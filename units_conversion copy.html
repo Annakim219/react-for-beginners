@@ -32,7 +32,7 @@
               disabled={inverted}
             />
             <h4>You want to convert {amount}</h4>
-            <label htmlFor="hours">Minutes</label>
+            <label htmlFor="hours">Hours</label>
             <input
               value={inverted ? amount : Math.round(amount / 60)} // 삼항 연산자 사용
               id="hours"
@@ -49,11 +49,54 @@
     }
 
     function KmToMiles() {
-      return <h1>KM 2 M</h1>;
+      const [distance, setDistance] = React.useState(0);
+      const [inverted, setInverted] = React.useState(false);
+
+      const onSelect = (event) => {
+        setDistance(event.target.value);
+      };
+
+      const reset = () => {
+        setDistance(0);
+      };
+
+      const onInvert = () => {
+        setInverted(!inverted);
+        setDistance(0);
+      };
+      return (
+        <div>
+          <div>
+            <label htmlFor="kilometer">Kilometer</label>
+            <input
+              value={inverted ? distance * 1.609 : distance}
+              id="kilometer"
+              type="number"
+              placeholder="kilometer"
+              onChange={onSelect}
+              disabled={inverted}
+            />
+            <h4>You want to convert {distance}</h4>
+            <label htmlFor="miles">Miles</label>
+            <input
+              value={inverted ? distance : distance / 1.609}
+              id="miles"
+              type="number"
+              placeholder="miles"
+              onChange={onSelect}
+              disabled={!inverted}
+            />
+          </div>
+          <button onClick={reset}>reset</button>
+          <button onClick={onInvert}>
+            {inverted ? "turn back" : "invert"}
+          </button>
+        </div>
+      );
     }
 
     function App() {
-      const [index, setIndex] = React.useState("0");
+      const [index, setIndex] = React.useState("x");
       const onSelect = (event) => {
         setIndex(event.target.value);
       };
@@ -61,6 +104,7 @@
         <div>
           <h1>Super Converter</h1>
           <select onChange={onSelect}>
+            <option value="x">select converter</option>
             <option value="0">Minutes & Hours</option>
             <option value="1">KM & Miles</option>
           </select>
